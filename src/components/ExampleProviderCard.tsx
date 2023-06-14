@@ -70,7 +70,9 @@ const ProviderCard: CardComponent<Provider> = ({
               </>
             )}
             <br />
-            {provider.address?.city}, {provider.address?.region}{" "}
+            {provider.address?.city
+              ? `${provider.address?.city}, ${provider.address?.region}`
+              : null}
             {provider.address?.postalCode}
           </dd>
         </dl>

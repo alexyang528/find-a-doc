@@ -8,10 +8,12 @@ import {
   Pagination,
   FilterSearch,
   OnSelectParams,
+  Geolocation,
+  Facets,
 } from "@yext/search-ui-react";
-import Facets from "./Facets";
 import ProviderCard from "./ExampleProviderCard";
 import NoResults from "./NoResults";
+import { StandardFacet } from "@yext/search-ui-react";
 
 const Results = () => {
   const actions = useSearchActions();
@@ -50,23 +52,49 @@ const Results = () => {
           onSelect={handleSearch}
           placeholder="Search by name, location, or specialty..."
         />
-        <Facets />
+
         <ResultsCount
           customCssClasses={{
-            resultsCountContainer: "text-sm text-gray-700 font-normal m-0",
+            resultsCountContainer: "text-md text-gray-700 font-normal m-0",
           }}
         />
-        <VerticalResults
-          CardComponent={ProviderCard}
-          displayAllOnNoResults={false}
-          customCssClasses={{
-            verticalResultsContainer:
-              "grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
-          }}
-        />
+        <div className="flex">
+          <Facets customCssClasses={{ facetsContainer: "w-56" }}>
+            <StandardFacet
+              fieldId="c_specialty.name"
+              label="Specialty"
+              defaultExpanded={false}
+            />
+            <StandardFacet
+              fieldId="c_specialty.c_relatedConditions.name"
+              label="Conditions"
+              defaultExpanded={false}
+            />
+            <StandardFacet
+              fieldId="c_specialty.c_relatedProcedures.name"
+              label="Procedures"
+              defaultExpanded={false}
+            />
+            <StandardFacet
+              fieldId="c_specialty.c_relatedReasonsForVisit.name"
+              label="Reasons for Visit"
+              defaultExpanded={false}
+            />
+          </Facets>
+          <div className="mx-8">
+            <VerticalResults
+              CardComponent={ProviderCard}
+              displayAllOnNoResults={false}
+              customCssClasses={{
+                verticalResultsContainer:
+                  "grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+              }}
+            />
+          </div>
+        </div>
         <Pagination />
         {results && results?.length < 1 && <NoResults />}
-        <LocationBias customCssClasses={{ locationBiasContainer: "pt-8" }} />
+        <Geolocation customCssClasses={{ geolocationContainer: "pt-8" }} />
       </div>
     </div>
   );
